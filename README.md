@@ -1,4 +1,4 @@
-![Hurdler logo](https://raw.github.com/jaydenseric/hurdler/master/hurdler-logo.svg)
+![Hurdler logo](http://jaydenseric.com/shared/hurdler-logo.svg)
 
 # Hurdler hash routing
 
