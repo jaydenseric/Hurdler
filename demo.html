@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Hurdler demo</title>
+    <meta name="description" content="Hurdler demo." />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        margin: 1.5em;
+        text-align: center;
+        font: 20px sans-serif;
+        color: #404040;
+      }
+      h1 {
+        margin-bottom: 2em;
+      }
+      nav,
+      #intro,
+      section,
+      .slideshow > li {
+        margin-top: 1.5em;
+        padding: 1.5em;
+        border: 1px dashed rgba(0, 0, 0, .25);
+      }
+      #intro,
+      section,
+      .slideshow > li {
+        background-color: rgba(80, 0, 50, .06);
+      }
+      nav {
+        background-color: #d5e3ff;
+      }
+      nav a {
+        display: inline-block;
+        margin: .4em;
+      }
+      .slideshow {
+        margin: 0;
+        padding: 0;
+      }
+      .slideshow > li {
+        display: none;
+      }
+      .slideshow > .active {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="https://github.com/jaydenseric/hurdler"><img src="hurdler-logo.svg" alt="Hurdler logo" /></a>
+    <h1>Demo</h1>
+    <nav>
+      <a href="#intro">#intro</a>
+      <a href="#section-1">#section-1</a>
+      <a href="#section-2">#section-2</a>
+    </nav>
+    <div id="intro">
+      <h2>#intro</h2>
+      <p>No matching test.</p>
+    </div>
+    <section id="section-1">
+      <h2>#section-1</h2>
+      <p>Matches the "section" test.</p>
+      <nav>
+        <a href="#slide-1">#slide-1</a>
+        <a href="#slide-2">#slide-2</a>
+        <a href="#slide-3">#slide-3</a>
+      </nav>
+      <ol class="slideshow">
+        <li class="active" id="slide-1">
+          <h3>#slide-1</h3>
+          <p>Matches the "slide" test.</p>
+        </li>
+        <li id="slide-2">
+          <h3>#slide-2</h3>
+          <p>Matches the "slide" test.</p>
+        </li>
+        <li id="slide-3">
+          <h3>#slide-3</h3>
+          <p>Matches the "slide" test.</p>
+        </li>
+      </ol>
+    </section>
+    <section id="section-2">
+      <h2>#section-2</h2>
+      <p>Matches the "section" test.</p>
+    </section>
+    <script src="hurdler.js"></script>
+    <script>
+      // Construct a new Hurdler instance
+      var hurdler = new Hurdler;
+      // Prepare scroll unique action
+      hurdler.addUniqueAction('scroll', function() {
+        // Todo: Scroll code here
+        console.log('Scroll to ' + this);
+      });
+      // Prepare sections
+      hurdler.addTest(
+        'section',
+        function() { return this.tagName == 'SECTION' },
+        function() { alert('"section" action fired.') },
+        ['scroll']
+      );
+      // Prepare slideshows
+      function activateSlide(slide) {
+        slide.parentNode.querySelector('.active').classList.remove('active');
+        slide.classList.add('active');
+      }
+      hurdler.addTest(
+        'slide',
+        function() {
+          var parent = this.parentNode;
+          if (parent.classList) return this.parentNode.classList.contains('slideshow');
+          else return false;
+        },
+        function() {
+          alert('"slide" action fired.');
+          activateSlide(this);
+        },
+        ['scroll']
+      );
+      // Initialize Hurdler
+      hurdler.run();
+    </script>
+  </body>
+</html>
