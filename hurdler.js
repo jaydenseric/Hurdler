@@ -1,7 +1,7 @@
 /**
  * Constructs a new Hurdler instance.
  * @class
- * @classdesc Hurdler: Semantic URL hash routing using tests.
+ * @classdesc Hurdler enables hash links to web page content that is hidden beneath layers of interaction.
  * @version 1.0.0-alpha
  * @author Jayden Seric
  * @copyright 2015

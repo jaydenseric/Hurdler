@@ -1,8 +1,10 @@
-![Hurdler logo](http://jaydenseric.com/shared/hurdler-logo.svg)
+# ![Hurdler logo](http://jaydenseric.com/shared/hurdler-logo.svg)
 
-# Hurdler hash routing
+Hurdler enables hash links to web page content that is hidden beneath layers of interaction. Ultra-lightweight with zero dependancies.
 
-Semantic URL hash routing using tests. Ultra-lightweight with zero dependancies.
+On document ready or whenever the URL fragment identifier changes, Hurdler finds the hash target element and runs the configured tests. Each matching test triggers an action. Tests are repeated for each ansestor up the DOM.
+
+Native scroll-jump behavior when a same-page hash link is clicked and a test matches is prevented with `event.preventDefault()`.
 
 ## Demo
 
@@ -10,7 +12,7 @@ Try out *demo.html* [via RawGit](http://rawgit.com/jaydenseric/Hurdler/master/de
 
 ## Browser support
 
-Evergreen browsers and IE9.
+Evergreen browsers.
 
 ## API
 
