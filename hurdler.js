@@ -13,12 +13,14 @@ function Hurdler() {
   self.tests = [];
   // Ensure URL hash change triggers tests
   window.addEventListener('hashchange', self.run);
-  // Polyfill Element.matches()
-  var ep = Element.prototype;
-  if (Element && !ep.matches) ep.matches = ep.matchesSelector || ep.webkitMatchesSelector || ep.mozMatchesSelector || ep.oMatchesSelector || ep.msMatchesSelector;
-  // Prevent native scroll jump behavior for hash links that trigger an action
+  // Prevent native scroll jump for same-page hash links that match a test
   document.addEventListener('click', function(event) {
-    if (event.target.matches('a[href^="#"]')) self.setHash(event.target.hash.substr(1), event);
+    if (
+      event.target.hash
+      && event.target.search == location.search
+      && (event.target.pathname == location.pathname || '/' + event.target.pathname == location.pathname)
+      && event.target.host == location.host
+    ) self.setHash(event.target.hash.substr(1), event);
   });
 };
 
