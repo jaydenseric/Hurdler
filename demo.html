@@ -89,40 +89,46 @@
     </section>
     <script src="hurdler.js"></script>
     <script>
+
       // Construct a new Hurdler instance
       var hurdler = new Hurdler;
+
       // Prepare scroll unique action
       hurdler.addUniqueAction('scroll', function() {
         // Todo: Scroll code here
         console.log('Scroll to ' + this);
       });
-      // Prepare sections
-      hurdler.addTest(
-        'section',
-        function() { return this.tagName == 'SECTION' },
-        function() { alert('"section" action fired.') },
-        ['scroll']
-      );
-      // Prepare slideshows
+
+      // Handle sections
+      hurdler.addTest({
+        id: 'section',
+        test: function() { return this.tagName == 'SECTION' },
+        action: function() { alert('"section" action fired.') },
+        uniqueActions: ['scroll']
+      });
+
+      // Handle slideshows
       function activateSlide(slide) {
         slide.parentNode.querySelector('.active').classList.remove('active');
         slide.classList.add('active');
       }
-      hurdler.addTest(
-        'slide',
-        function() {
+      hurdler.addTest({
+        id: 'slide',
+        test: function() {
           var parent = this.parentNode;
           if (parent.classList) return this.parentNode.classList.contains('slideshow');
           else return false;
         },
-        function() {
+        action: function() {
           alert('"slide" action fired.');
           activateSlide(this);
         },
-        ['scroll']
-      );
+        uniqueActions: ['scroll']
+      });
+
       // Initialize Hurdler
       hurdler.run();
+
     </script>
   </body>
 </html>

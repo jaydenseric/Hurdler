@@ -28,7 +28,7 @@ function Hurdler() {
  * Adds a new unique action that can be triggered once per hash change by multiple tests.
  * @method
  * @param {string} id - Unique action ID.
- * @param {function} action - Can only run once per hash change.
+ * @param {function} action - Action intended to run only once per hash change.
  */
 Hurdler.prototype.addUniqueAction = function(id, action) {
   this.uniqueActions[id] = action;
@@ -37,24 +37,20 @@ Hurdler.prototype.addUniqueAction = function(id, action) {
 /**
  * Adds a new test.
  * @method
- * @param {string} id - Unique test ID.
- * @param {function} test - Must return a boolean determining if the action should run.
- * @param {function} action - Action to run if the test passes.
- * @param {array} uniqueActions - Unique actions to run if the test passes.
+ * @param {object} options - Options for the test.
+ * @param {string} options.id - Unique test ID.
+ * @param {function} options.test - Must return a boolean determining if the action should run.
+ * @param {function} options.action - Action to run if the test passes.
+ * @param {array} [options.uniqueActions] - Optional: Unique actions to run if the test passes.
  */
-Hurdler.prototype.addTest = function(id, test, action, uniqueActions) {
-  this.tests.push({
-    id: id,
-    test: test,
-    action: action,
-    uniqueActions: uniqueActions
-  });
+Hurdler.prototype.addTest = function(options) {
+  this.tests.push(options);
 };
 
 /**
  * Runs tests and actions for the current URL hash.
  * @method
- * @param {object} event - Optional: Event to prevent default if a test matches.
+ * @param {object} [event] - Optional: Event to prevent default if a test passes.
  */
 Hurdler.prototype.run = function(event) {
   var self = this;
@@ -95,7 +91,7 @@ Hurdler.prototype.run = function(event) {
  * Sets the URL hash and runs the tests.
  * @method
  * @param {string} id - A DOM element ID.
- * @param {object} event - Optional: Event to prevent default if a test matches.
+ * @param {object} [event] - Optional: Event to prevent default if a test passes.
  */
 Hurdler.prototype.setHash = function(id, event) {
   history.pushState(null, null, '#' + id);
