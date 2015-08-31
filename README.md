@@ -1,6 +1,6 @@
 # ![Hurdler](http://jaydenseric.com/shared/hurdler-logo.svg)
 
-Hurdler enables hash links to web page content that is hidden beneath layers of interaction. Ultra-lightweight plain JS.
+Hurdler enables hash links to web page content hidden beneath layers of interaction, written in ultra-lightweight plain JS.
 
 Setup simple tests identifying components along with callbacks for what you want to happen when they are encountered. When a URL hash is set all tests are run against the target element and ancestors.
 
