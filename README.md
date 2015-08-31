@@ -57,3 +57,11 @@ Param   | Type     | Description
 ------- | -------- | ----------------------------------------------------
 id      | `string` | A DOM element ID.
 [event] | `object` | Optional: Event to prevent default if a test passes.
+
+### `hurdler.clearHash(id)`
+
+Clears the URL hash if a particular hash is active.
+
+Param   | Type     | Description
+------- | -------- | -----------------
+id      | `string` | A DOM element ID.

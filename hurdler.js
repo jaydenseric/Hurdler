@@ -97,3 +97,12 @@ Hurdler.prototype.setHash = function(id, event) {
   history.pushState(null, null, '#' + id);
   this.run(event);
 };
+
+/**
+ * Clears the URL hash if a particular hash is active.
+ * @method
+ * @param {string} id - A DOM element ID.
+ */
+Hurdler.prototype.clearHash = function(id) {
+  if (location.hash == '#' + id) history.pushState('', document.title, location.pathname + location.search);
+};
