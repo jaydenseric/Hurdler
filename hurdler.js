@@ -1,7 +1,7 @@
 /**
  * Constructs a new Hurdler instance.
  * @class
- * @classdesc Hurdler enables hash links to web page content that is hidden beneath layers of interaction.
+ * @classdesc Hurdler enables hash links to web page content hidden beneath layers of interaction
  * @version 1.0.0-alpha
  * @author Jayden Seric
  * @copyright 2015
@@ -26,10 +26,10 @@ function Hurdler() {
 };
 
 /**
- * Adds a new test. A per-run session object can be accessed as a callback argument, handy for creating custom flags to ensure certain things only happen once per run.
+ * Adds a new test.
  * @method
- * @param {function} test - Test returning a boolean if the callback should fire.
- * @param {function} callback - Callback to fire if the test passes. Passed a per-run session object.
+ * @param {function} test - Test returning a Boolean if the callback should fire.
+ * @param {function} callback - Callback to fire if the test passes. Passed a per-run session object argument, handy for creating custom flags to ensure certain things only happen once per run.
  */
 Hurdler.prototype.addTest = function(test, callback) {
   this.tests.push({
