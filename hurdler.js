@@ -39,7 +39,7 @@ Hurdler.prototype.addTest = function(test, callback) {
 };
 
 /**
- * Runs tests and callbacks for the current URL hash.
+ * Runs tests and callbacks for the current URL hash. Use this after all your tests have been added and the document is ready.
  * @method
  * @param {object} [event] - Optional: Event to prevent default if a test passes.
  */
