@@ -23,7 +23,7 @@ function Hurdler() {
       && link.host == location.host
     ) self.setHash(link.hash.substr(1), event);
   });
-};
+}
 
 /**
  * Adds a new test.
