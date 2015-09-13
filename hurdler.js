@@ -54,7 +54,10 @@ Hurdler.prototype.run = function(event) {
     // Run all tests on this DOM element
     for (var i in self.tests) {
       // Check test passes
-      if (self.tests[i].test.call(element, session)) {
+      var passes = false;
+      try { passes = self.tests[i].test.call(element, session) }
+      catch(error) {} // Swallow test errors
+      if (passes) {
         // If event supplied, prevent the default action
         if (event !== undefined) event.preventDefault();
         // Run the callback
