@@ -32,7 +32,7 @@ callback | function | Callback to fire if the test passes. Passed a per-run sess
 Runs tests and callbacks for the current URL hash. Use this after all your tests have been added and the document is ready.
 
 Parameter | Type | Description
----| --- | ---
+--- | --- | ---
 [event] | object | Optional: Event to prevent default if a test passes.
 
 ### `hurdler.setHash(id, event)`
