@@ -50,4 +50,4 @@ Use `Hurdler.clearHash(id)` to clear the URL hash if it contains the specified e
 
 ### Get target ID
 
-Use `Hurdler.getTargetId(id)` to get the target element ID from the URL hash. Returns `false` if no hash is set or the required prefix is missing.
+Use `Hurdler.getTargetId()` to get the target element ID from the URL hash. Returns `false` if no hash is set or the required prefix is missing.
