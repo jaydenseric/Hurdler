@@ -2,52 +2,48 @@
 
 Hurdler enables hash links to web page content hidden beneath layers of interaction, written in ultra-lightweight plain JS.
 
-Setup simple tests identifying components along with callbacks for what you want to happen when they are encountered. When a URL hash is set all tests are run against the target element and ancestors.
+Setup simple tests identifying components along with callbacks for when they are encountered. When a valid URL hash is set all tests are run against the target element and ancestors.
 
-Native scroll-jump behaviour is prevented for same-page hash links that pass a test.
+By default, only URL hashes prefixed with "/" are operated on to avoid browser scroll jumping and page tearing behaviours.
+
+Check out [Skid](https://github.com/jaydenseric/Skid) to see a working implementation.
 
 ## Browser support
 
-Evergreen browsers.
+Evergreen browsers and IE9.
 
 Be sure to include [a polyfill](https://plainjs.com/javascript/traversing/get-closest-element-by-selector-39) for [`Element.closest()`](https://developer.mozilla.org/docs/Web/API/Element/closest).
 
 ## Usage
 
-### `new Hurdler()`
+Add [*hurdler.js*](https://github.com/jaydenseric/Hurdler/blob/master/hurdler.js) to your project before any scripts using it.
 
-Constructs a new Hurdler instance.
+### Setup tests
 
-### `hurdler.addTest(test, callback)`
+To add a new test and callback action:
 
-Adds a new test.
+```js
+Hurdler.tests.push({
+  test: function() {
+    return // Logic resulting in true or false
+  },
+  callback: function(session) {
+    // Test success actions
+  }
+});
+```
 
-Parameter | Type | Description
---- | --- | ---
-test | function | Test returning a Boolean if the callback should fire.
-callback | function | Callback to fire if the test passes. Passed a per-run session object argument, handy for creating custom flags to ensure certain things only happen once per run.
+- `test` must return a Boolean if the callback should fire. Every Hurdler run this test will be applied to the URL hash target element and each ancestor. For example, you may check if the element has a particular class.
+- `callback` runs on a successful test. Hurdler passes it a per-run `session` object, handy for creating flags to ensure certain things (such as scrolling the page) only happen once per run.
 
-### `hurdler.run(event)`
+### Run
 
-Runs tests and callbacks for the current URL hash. Use this after all your tests have been added and the document is ready.
+Use `Hurdler.run()` after all your tests have been added and the document is ready. A run happens automatically whenever the URL hash changes.
 
-Parameter | Type | Description
---- | --- | ---
-[event] | object | Optional: Event to prevent default if a test passes.
+### Set hash
 
-### `hurdler.setHash(id, event)`
+Use `Hurdler.setHash(id)`, with `id` being a target element ID string. Changing the URL hash triggers a run.
 
-Sets the URL hash and runs the tests.
+### Clear hash
 
-Parameter | Type | Description
---- | --- | ---
-id | string | A DOM element ID.
-[event] | object | Optional: Event to prevent default if a test passes.
-
-### `hurdler.clearHash(id)`
-
-Clears the URL hash if a particular hash is active.
-
-Parameter | Type | Description
---- | --- | ---
-id | string | A DOM element ID.
+Use `Hurdler.clearHash(id)` to clear the URL hash if it contains the specified element ID string.
