@@ -47,3 +47,7 @@ Use `Hurdler.setHash(id)`, with `id` being a target element ID string. Changing 
 ### Clear hash
 
 Use `Hurdler.clearHash(id)` to clear the URL hash if it contains the specified element ID string.
+
+### Get target ID
+
+Use `Hurdler.getTargetId(id)` to get the target element ID from the URL hash. Returns `false` if no hash is set or the required prefix is missing.
