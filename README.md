@@ -34,7 +34,7 @@ Hurdler.tests.push({
 ```
 
 - `test` must return a Boolean if the callback should fire. Every Hurdler run this test will be applied to the URL hash target element and each ancestor. For example, you may check if the element has a particular class.
-- `callback` runs on a successful test. Hurdler passes it a per-run `session` object, handy for creating flags to ensure certain things (such as scrolling the page) only happen once per run.
+- `callback` runs on a successful test. Hurdler passes it a per-run `session` object, handy for creating flags to ensure certain things (such as scrolling the page) only happen once per run. The tested element is available as `this`.
 
 ### Run
 
