@@ -1,7 +1,7 @@
 /**
  * Enables hash links to web page content hidden beneath layers of interaction.
  * @see https://github.com/jaydenseric/Hurdler
- * @version 1.2.0
+ * @version 2.0.0
  * @author Jayden Seric
  * @license MIT
  */
@@ -18,9 +18,9 @@ var Hurdler = {
   before: [],
 
   /**
-   * @property {Array<{test: function, callback: function}>} tests - List of objects containing a test and callback function.
+   * @property {Array<{test: function, callback: function}>} hurdles - List of hurdle objects containing a test and callback function.
    */
-  tests: [],
+  hurdles: [],
 
   /**
    * @property {function[]} after - List of functions to run after each Hurdler run.
@@ -37,7 +37,7 @@ var Hurdler = {
   },
 
   /**
-   * Sets the URL hash and runs the tests.
+   * Sets the URL hash.
    * @param {string} id - A DOM element ID.
    */
   setHash: function(id) {
@@ -56,35 +56,51 @@ var Hurdler = {
   },
 
   /**
-   * Runs tests and callbacks for the current URL hash. Use this after all your tests have been added and the document is ready.
+   * Finds hurdles and runs callbacks for the current URL hash. Use this after all hurdles have been setup and the document is ready.
    */
   run: function() {
-    // Abandon if no URL hash
+    // Progress if a URL hash is set
     if (location.hash) {
       // Check hash matches the configured Hurdler format
       var id = Hurdler.getTargetId();
       if (id) {
         var element = document.querySelector('#' + id);
-        // Only progress if the element exists
+        // Progress if the element exists
         if (element) {
-          // Establish the run session and store the target element
-          var session = { target: element };
-          // Run any before run functions
-          for (var i in Hurdler.before) { Hurdler.before[i].call(Hurdler, session) }
+          // Establish the run session
+          var session = {
+            target  : element,
+            hurdles : []
+          };
           // Start at the hash target and loop up the DOM
           for (; element && element !== document; element = element.parentNode) {
-            // Run all tests on this DOM element
-            for (var i in Hurdler.tests) {
-              // Check test passes
+            // Check if element is a hurdle
+            Hurdler.hurdles.forEach(function(hurdle) {
               var passes = false;
-              try { passes = Hurdler.tests[i].test.call(element, session) }
-              catch(error) {} // Swallow test errors
-              // Run the callback if the test passes
-              if (passes) Hurdler.tests[i].callback.call(element, session);
-            }
+              try { passes = hurdle.test.call(element, session) }
+              catch(error) {} // Swallow errors
+              if (passes) {
+                // Update list of found hurdles
+                session.hurdles.unshift({
+                  element  : element,
+                  test     : hurdle.test,
+                  callback : hurdle.callback
+                });
+              }
+            });
           }
-          // Run any after run functions
-          for (var i in Hurdler.after) { Hurdler.after[i].call(Hurdler, session) }
+          // Run before run callbacks
+          Hurdler.before.forEach(function(callback) {
+            callback.call(session.target, session);
+          });
+          // Run hurdle callbacks
+          session.hurdles.forEach(function(hurdle) {
+            hurdle.callback.call(hurdle.element, session);
+          });
+          // Run after run callbacks
+          Hurdler.after.forEach(function(callback) {
+            callback.call(session.target, session);
+          });
         }
       }
     }

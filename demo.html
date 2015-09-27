@@ -66,22 +66,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom4/1.4.8/dom4.js"></script>
     <script src="hurdler.js"></script>
     <script>
-      // Reset sections display before each Hurdler run
+      // Reset sections before each Hurdler run
       Hurdler.before.push(function() {
         document.queryAll('section.visible').forEach(function(element) {
           element.classList.remove('visible');
         });
       });
-      // Setup Hurdler tests
-      Hurdler.tests.push({
-        test: function() { return this.matches('section') },
+      // Setup hurdle
+      Hurdler.hurdles.push({
+        test: function() {
+          return this.matches('section');
+        },
         callback: function() {
           // Display section
           this.classList.add('visible');
         }
       });
       // Scroll to URL hash target element after each Hurdler run
-      Hurdler.after.push(function(session) { session.target.scrollIntoView() });
+      Hurdler.after.push(function() {
+        this.scrollIntoView();
+      });
       // Run Hurdler on document ready
       if (document.readyState != 'loading') Hurdler.run();
       else document.addEventListener('DOMContentLoaded', Hurdler.run);

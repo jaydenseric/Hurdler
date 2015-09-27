@@ -1,8 +1,8 @@
 # ![Hurdler](http://jaydenseric.com/shared/hurdler-logo.svg)
 
-Hurdler enables hash links to web page content hidden beneath layers of interaction, written in ultra-lightweight plain JS.
+Hurdler enables hash links to web page content hidden beneath layers of interaction, written in lightweight plain JS.
 
-Setup simple tests identifying components along with callbacks for when they are encountered. When a valid URL hash is set all tests are run against the target element and ancestors.
+Setup simple tests identifying hurdles along with callbacks for when they are encountered.
 
 By default, only URL hashes prefixed with "/" are operated on to avoid browser scroll jumping and page tearing behaviours.
 
@@ -18,14 +18,23 @@ Be sure to include [a polyfill](https://plainjs.com/javascript/traversing/get-cl
 
 Add [*hurdler.js*](https://github.com/jaydenseric/Hurdler/blob/master/hurdler.js) to your project before any scripts using it.
 
-### Setup tests
+### Run session
 
-To add a new test and callback action:
+All callbacks are passed a per-run `session` object containing:
+
+- `target`: URL hash target element.
+- `hurdles`: List of hurdles down to the target, including each hurdle element, test and callback.
+
+You can add custom properties to the run session from within callbacks. Handy for tracking things you would like to happen once per run such as scrolling.
+
+### Setup hurdles
+
+To add a new hurdle test and callback:
 
 ```js
-Hurdler.tests.push({
-  test: function() {
-    console.log(this);
+Hurdler.hurdles.push({
+  test: function(session) {
+    console.log(this, session);
     return /* Boolean logic */;
   },
   callback: function(session) {
@@ -36,27 +45,27 @@ Hurdler.tests.push({
 
 `test` must return a Boolean if the callback should fire, with `this` being the element to test. Every Hurdler run this test will be applied to the URL hash target element and each ancestor. For example, you may check if the element has a particular class.
 
-`callback` runs if the test succeeds, with `this` being the tested element. A per-run `session` object is available containing `target`, the URL hash target element.
+`callback` runs if the test succeeds, with `this` being the tested element. To prevent [issues](https://github.com/jaydenseric/Hurdler/issues/1), callbacks for hurdles found in a run are triggered in order of DOM nesting.
 
 ### Before & after run callbacks
 
-Run callbacks are only triggered if the URL hash is in the configured Hurdler format and it matches a target element.
+Run callbacks are only triggered if the URL hash is in the configured Hurdler format and it matches an element ID.
 
-You can add as many callbacks as you like:
+You can add as many callbacks as you like, with `this` being the URL hash target element:
 
 ```js
 Hurdler.before.push(function(session) {
-  console.log(session.target);
+  console.log(this, session);
 });
 
 Hurdler.after.push(function(session) {
-  console.log(session.target);
+  console.log(this, session);
 });
 ```
 
 ### Run
 
-Use `Hurdler.run()` after all your tests have been added and the document is ready. A run happens whenever the URL hash changes.
+Use `Hurdler.run()` to find hurdles and run callbacks for the current URL hash. Use this after all hurdles have been setup and the document is ready. A run happens whenever the URL hash changes.
 
 ### Set hash
 
