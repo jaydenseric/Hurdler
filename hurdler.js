@@ -1,7 +1,7 @@
 /**
  * Enables hash links to web page content hidden beneath layers of interaction.
  * @see https://github.com/jaydenseric/Hurdler
- * @version 1.1.0
+ * @version 1.2.0
  * @author Jayden Seric
  * @license MIT
  */
@@ -13,9 +13,19 @@ var Hurdler = {
   hashPrefix: '/',
 
   /**
+   * @property {function[]} before - List of functions to run before each Hurdler run.
+   */
+  before: [],
+
+  /**
    * @property {Array<{test: function, callback: function}>} tests - List of objects containing a test and callback function.
    */
   tests: [],
+
+  /**
+   * @property {function[]} after - List of functions to run after each Hurdler run.
+   */
+  after: [],
 
   /**
    * Gets the target element ID from the URL hash.
@@ -51,26 +61,30 @@ var Hurdler = {
   run: function() {
     // Abandon if no URL hash
     if (location.hash) {
-      var self = this;
       // Check hash matches the configured Hurdler format
-      var id = self.getTargetId();
+      var id = Hurdler.getTargetId();
       if (id) {
         var element = document.querySelector('#' + id);
         // Only progress if the element exists
         if (element) {
-          var session = {};
+          // Establish the run session and store the target element
+          var session = { target: element };
+          // Run any before run functions
+          for (var i in Hurdler.before) { Hurdler.before[i].call(Hurdler, session) }
           // Start at the hash target and loop up the DOM
           for (; element && element !== document; element = element.parentNode) {
             // Run all tests on this DOM element
-            for (var i in self.tests) {
+            for (var i in Hurdler.tests) {
               // Check test passes
               var passes = false;
-              try { passes = self.tests[i].test.call(element, session) }
+              try { passes = Hurdler.tests[i].test.call(element, session) }
               catch(error) {} // Swallow test errors
               // Run the callback if the test passes
-              if (passes) self.tests[i].callback.call(element, session);
+              if (passes) Hurdler.tests[i].callback.call(element, session);
             }
           }
+          // Run any after run functions
+          for (var i in Hurdler.after) { Hurdler.after[i].call(Hurdler, session) }
         }
       }
     }
