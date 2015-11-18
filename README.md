@@ -1,80 +1,116 @@
 # ![Hurdler](http://jaydenseric.com/shared/hurdler-logo.svg)
 
-Hurdler enables hash links to web page content hidden beneath layers of interaction, written in lightweight plain JS.
+Hurdler enables links direct to content deeply nested in UI components (hurdles), using URL hashes containing just the target element id. Try the [demo](http://rawgit.com/jaydenseric/Hurdler/master/demo.html) or check out [Skid](https://github.com/jaydenseric/Skid) for a working implementation.
 
-Setup simple tests identifying hurdles along with callbacks for when they are encountered.
+Setup simple tests identifying hurdles along with callbacks for when they are encountered. By default, only URL hashes prefixed with `/` (eg. `href="#/menu"`) are operated on to avoid scroll jumping and page tearing. The prefix can be customized to avoid conflicts with other scripts using the URL hash.
 
-By default, only URL hashes prefixed with "/" are operated on to avoid browser scroll jumping and page tearing behaviours.
+General benefits to controlling components via URL hash:
 
-Try the [demo](http://rawgit.com/jaydenseric/Hurdler/master/demo.html) or check out [Skid](https://github.com/jaydenseric/Skid) to see a working implementation.
+- Links to specific, nested pieces of content can be bookmarked or shared.
+- Users can intuitively right-click on a control (eg. a menu button) and open in a new tab.
+
+Why Hurdler, and not a URL hash router like [director](https://github.com/flatiron/director) or [page.js](https://github.com/visionmedia/page.js)?
+
+- No route configuration. Nest components in layouts however you like and even move them around on the fly!
+- Components can be super portable with internally defined hurdles.
+- Much shorter links.
+
+Compare these equivalent links:
+
+Hurdler     | Director/page.js
+------------|--------------------------------------------
+`#/about`   | `#/section/about`
+`#/gallery` | `#/section/about/tab/gallery`
+`#/slide-1` | `#/section/about/tab/gallery/slide/slide-1`
 
 ## Browser support
 
-Evergreen browsers and IE9.
+[Evergreen browsers](http://stackoverflow.com/a/19060334) and IE 9+.
 
-Be sure to include [a polyfill](https://plainjs.com/javascript/traversing/get-closest-element-by-selector-39) for [`Element.closest()`](https://developer.mozilla.org/docs/Web/API/Element/closest).
+Be sure to polyfill:
+
+- [`closest`](https://dom.spec.whatwg.org/#dom-element-closest)
 
 ## Usage
 
-Add [*hurdler.js*](https://github.com/jaydenseric/Hurdler/blob/master/hurdler.js) to your project before any scripts using it.
+### Setup
 
-### Run session
+1. Add [*hurdler.js*](https://github.com/jaydenseric/Hurdler/blob/master/hurdler.js) and [required polyfills](https://github.com/jaydenseric/Hurdler#browser-support).
+2. Initiaze Hurdler.
+3. Setup hurdles.
+4. After adding hurdles and the document is ready, run a first sprint.
 
-All callbacks are passed a per-run `session` object containing:
-
-- `target`: URL hash target element.
-- `hurdles`: List of hurdles down to the target, including each hurdle element, test and callback.
-
-You can add custom properties to the run session from within callbacks. Handy for tracking things you would like to happen once per run such as scrolling.
-
-### Setup hurdles
-
-To add a new hurdle test and callback:
+### Initiaze Hurdler
 
 ```js
-Hurdler.hurdles.push({
-  test: function(session) {
-    console.log(this, session);
-    return /* Boolean logic */;
+var hurdler = new Hurdler({
+  // option: value
+});
+```
+
+Here are the available constructor options:
+
+Option       | Type     | Description                                                  | Default
+-------------|----------|--------------------------------------------------------------|--------
+`hashPrefix` | string   | String between the hash character and the element ID string. | `/`
+`before`     | Array    | Functions for before each sprint.                            |
+`after`      | Array    | Functions for after each sprint.                             |
+
+### Add a hurdle
+
+```js
+hurdler.addHurdle({
+  test: function() {
+    return // Boolean test on this
   },
-  callback: function(session) {
-    console.log(this, session);
+  callback: function() {
+    // Runs if test succeeds
   }
 });
 ```
 
-`test` must return a Boolean if the callback should fire, with `this` being the element to test. Every Hurdler run this test will be applied to the URL hash target element and each ancestor. For example, you may check if the element has a particular class.
+Hurdle options:
 
-`callback` runs if the test succeeds, with `this` being the tested element. To prevent [issues](https://github.com/jaydenseric/Hurdler/issues/1), callbacks for hurdles found in a run are triggered in order of DOM nesting.
+Option     | Type     | Description                                                               | Default
+-----------|----------|---------------------------------------------------------------------------|--------
+`test`     | function | Element test returning a boolean if it matches the hurdle.                |
+`callback` | function | Callback to run if the test passes.                                       |
+`repeat`   | boolean  | Should the callback repeat if the same hurdle is encountered next sprint. | `false`
 
-### Before & after run callbacks
+Every Hurdler sprint the `test` function will be applied to the URL hash target element and each ancestor. For example, the presence of a particular class name may trigger the callback.
+
+Inside both the `test` and `callback` functions `this` is the test element. To prevent [issues](https://github.com/jaydenseric/Hurdler/issues/1), callbacks for hurdles found in a sprint are triggered in order of DOM nesting.
+
+### Before & after sprint callbacks
 
 Run callbacks are only triggered if the URL hash is in the configured Hurdler format and it matches an element ID.
 
 You can add as many callbacks as you like, with `this` being the URL hash target element:
 
 ```js
-Hurdler.before.push(function(session) {
-  console.log(this, session);
+Hurdler.before.push(function() {
+  // Do stuff
 });
 
-Hurdler.after.push(function(session) {
-  console.log(this, session);
+Hurdler.after.push(function() {
+  // Do stuff
 });
 ```
 
-### Run
+### Run a sprint
 
-Use `Hurdler.run()` to find hurdles and run callbacks for the current URL hash. Use this after all hurdles have been setup and the document is ready. A run happens whenever the URL hash changes.
+Use `hurdler.sprint()` to find hurdles and run callbacks for the current URL hash. Use this after all hurdles have been added and the document is ready. A sprint happens whenever the URL hash changes.
 
-### Set hash
+### Working with the URL hash
 
-Use `Hurdler.setHash(id)`, with `id` being a target element ID string. Changing the URL hash triggers a run.
+#### Set the hash
 
-### Clear hash
+Use `hurdler.setHash(id)`, with `id` being a target element ID string. Changing the URL hash triggers a sprint.
 
-Use `Hurdler.clearHash(id)` to clear the URL hash if it contains the specified element ID string.
+#### Clear the hash
 
-### Get target ID
+Use `hurdler.clearHash(id)` to clear the URL hash if it contains the specified element ID string.
 
-Use `Hurdler.getTargetId()` to get the target element ID from the URL hash. Returns `false` if no hash is set or the required prefix is missing.
+#### Get the hash target ID
+
+Use `hurdler.getTargetId()` to get the target element ID from the URL hash. Returns `false` if no hash is set or the required prefix is missing.

@@ -63,32 +63,28 @@
         background-color: rgba(0, 0, 0, .02);
       }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom4/1.4.8/dom4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom4/1.5.2/dom4.js"></script>
     <script src="hurdler.js"></script>
     <script>
-      // Reset sections before each Hurdler run
-      Hurdler.before.push(function() {
+      // Initiaze Hurdler
+      var hurdler = new Hurdler;
+      // Reset sections before each Hurdler sprint
+      hurdler.before.push(function() {
         document.queryAll('section.visible').forEach(function(element) {
           element.classList.remove('visible');
         });
       });
       // Setup hurdle
-      Hurdler.hurdles.push({
-        test: function() {
-          return this.matches('section');
-        },
-        callback: function() {
-          // Display section
-          this.classList.add('visible');
-        }
+      hurdler.addHurdle({
+        test     : function() { return this.matches('section') },
+        callback : function() { console.log(this); this.classList.add('visible') },
+        repeat   : true
       });
-      // Scroll to URL hash target element after each Hurdler run
-      Hurdler.after.push(function() {
-        this.scrollIntoView();
-      });
-      // Run Hurdler on document ready
-      if (document.readyState != 'loading') Hurdler.run();
-      else document.addEventListener('DOMContentLoaded', Hurdler.run);
+      // Scroll to URL hash target element after each Hurdler sprint
+      hurdler.after.push(function() { this.scrollIntoView() });
+      // Sprint Hurdler on document ready
+      if (document.readyState != 'loading') hurdler.sprint();
+      else document.addEventListener('DOMContentLoaded', function() { hurdler.sprint() });
     </script>
   </head>
   <body>
