@@ -77,8 +77,7 @@
       // Setup hurdle
       hurdler.addHurdle({
         test     : function() { return this.matches('section') },
-        callback : function() { console.log(this); this.classList.add('visible') },
-        repeat   : true
+        callback : function() { this.classList.add('visible') }
       });
       // Scroll to URL hash target element after each Hurdler sprint
       hurdler.after.push(function() { this.scrollIntoView() });

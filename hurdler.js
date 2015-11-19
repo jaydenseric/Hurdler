@@ -11,13 +11,12 @@
  */
 function Hurdler(options) {
   var self = this;
-  options            = options            || {};
-  self.hashPrefix    = options.hashPrefix || '/';
-  self.before        = options.before     || [];
-  self.after         = options.after      || [];
-  self.hurdles       = [];
-  self.lastSprint    = null;
-  self.currentSprint = null;
+  options         = options            || {};
+  self.hashPrefix = options.hashPrefix || '/';
+  self.before     = options.before     || [];
+  self.after      = options.after      || [];
+  self.hurdles    = [];
+  self.sprints    = [];
   // Sprint Hurdler every URL hash change
   window.addEventListener('hashchange', function() { self.sprint() });
 }
@@ -27,13 +26,11 @@ function Hurdler(options) {
  * @param {Object}   options                - Hurdle options.
  * @param {function} options.test           - Element test returning a boolean if it matches the hurdle.
  * @param {function} options.callback       - Callback to run if the test passes.
- * @param {boolean}  [options.repeat=false] - Should the callback repeat if the same hurdle is encountered next sprint.
  */
 Hurdler.prototype.addHurdle = function(options) {
   this.hurdles.push({
     test     : options.test,
-    callback : options.callback,
-    repeat   : options.repeat || false
+    callback : options.callback
   });
 };
 
@@ -70,10 +67,6 @@ Hurdler.prototype.clearHash = function(id) {
  */
 Hurdler.prototype.sprint = function() {
   var self = this;
-  // Shift current sprint to last sprint
-  self.lastSprint = self.currentSprint;
-  // Clear current sprint
-  self.currentSprint = null;
   // Progress if a URL hash is set
   if (location.hash) {
     // Check hash matches the configured Hurdler format
@@ -82,11 +75,13 @@ Hurdler.prototype.sprint = function() {
       var element = document.querySelector('#' + id);
       // Progress if the element exists
       if (element) {
-        // Update current sprint
-        self.currentSprint = {
-          target  : element,
-          hurdles : []
-        };
+        // Record sprint
+        var sprint = self.sprints[
+          self.sprints.push({
+            target  : element,
+            hurdles : []
+          }) - 1
+        ];
         // Start at the hash target and loop up the DOM
         for (; element && element !== document; element = element.parentNode) {
           // Check if element is a hurdle
@@ -96,7 +91,7 @@ Hurdler.prototype.sprint = function() {
             catch (error) {} // Swallow errors
             if (passes) {
               // Update list of hurdles found this sprint
-              self.currentSprint.hurdles.unshift({
+              sprint.hurdles.unshift({
                 element : element,
                 hurdle  : hurdle
               });
@@ -105,25 +100,15 @@ Hurdler.prototype.sprint = function() {
         }
         // Run before sprint callbacks
         self.before.forEach(function(callback) {
-          callback.call(self.currentSprint.target);
+          callback.call(sprint.target, sprint);
         });
         // Run sprint hurdle callbacks
-        self.currentSprint.hurdles.forEach(function(currentSprintEncounter) {
-          // Only allow callback to run if repeat allowed or not a repeat
-          var run = true;
-          if (!currentSprintEncounter.hurdle.repeat && self.lastSprint) {
-            self.lastSprint.hurdles.forEach(function(lastSprintEncounter) {
-              if (
-                lastSprintEncounter.element == currentSprintEncounter.element &&
-                lastSprintEncounter.hurdle  == currentSprintEncounter.hurdle
-              ) run = false;
-            });
-          }
-          if (run) currentSprintEncounter.hurdle.callback.call(self.currentSprint.target);
+        sprint.hurdles.forEach(function(encounter) {
+          encounter.hurdle.callback.call(sprint.target, sprint);
         });
         // Run after sprint callbacks
         self.after.forEach(function(callback) {
-          callback.call(self.currentSprint.target);
+          callback.call(sprint.target, sprint);
         });
       }
     }

@@ -60,10 +60,10 @@ Option       | Type     | Description                                           
 
 ```js
 hurdler.addHurdle({
-  test: function() {
+  test: function(sprint) {
     return // Boolean test on this
   },
-  callback: function() {
+  callback: function(sprint) {
     // Runs if test succeeds
   }
 });
@@ -71,15 +71,16 @@ hurdler.addHurdle({
 
 Hurdle options:
 
-Option     | Type     | Description                                                               | Default
------------|----------|---------------------------------------------------------------------------|--------
-`test`     | function | Element test returning a boolean if it matches the hurdle.                |
-`callback` | function | Callback to run if the test passes.                                       |
-`repeat`   | boolean  | Should the callback repeat if the same hurdle is encountered next sprint. | `false`
+Option     | Type     | Description
+-----------|----------|-----------------------------------------------------------
+`test`     | function | Element test returning a boolean if it matches the hurdle.
+`callback` | function | Callback to run if the test passes.
 
 Every Hurdler sprint the `test` function will be applied to the URL hash target element and each ancestor. For example, the presence of a particular class name may trigger the callback.
 
-Inside both the `test` and `callback` functions `this` is the test element. To prevent [issues](https://github.com/jaydenseric/Hurdler/issues/1), callbacks for hurdles found in a sprint are triggered in order of DOM nesting.
+Inside both the `test` and `callback` functions `this` is the test element. Both are passed the active sprint object, containing the target element and hurdles encountered so far. You can add to the sprint object to set custom flags accessible in callbacks for following hurdle encounters.
+
+To prevent [issues](https://github.com/jaydenseric/Hurdler/issues/1), callbacks for hurdles found in a sprint are triggered in order of DOM nesting.
 
 ### Before & after sprint callbacks
 
@@ -88,11 +89,10 @@ Run callbacks are only triggered if the URL hash is in the configured Hurdler fo
 You can add as many callbacks as you like, with `this` being the URL hash target element:
 
 ```js
-Hurdler.before.push(function() {
+Hurdler.before.push(function(sprint) {
   // Do stuff
 });
-
-Hurdler.after.push(function() {
+Hurdler.after.push(function(sprint) {
   // Do stuff
 });
 ```
