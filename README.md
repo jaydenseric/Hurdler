@@ -18,7 +18,7 @@ Why Hurdler, and not a URL hash router like [director](https://github.com/flatir
 Compare these equivalent links:
 
 Hurdler     | Director/page.js
-------------|--------------------------------------------
+:-----------|:-------------------------------------------
 `#/about`   | `#/section/about`
 `#/gallery` | `#/section/about/tab/gallery`
 `#/slide-1` | `#/section/about/tab/gallery/slide/slide-1`
@@ -51,7 +51,7 @@ var hurdler = new Hurdler({
 Here are the available constructor options:
 
 Option       | Type     | Description                                                  | Default
--------------|----------|--------------------------------------------------------------|--------
+:------------|:---------|:-------------------------------------------------------------|:-------
 `hashPrefix` | string   | String between the hash character and the element ID string. | `/`
 `before`     | Array    | Functions for before each sprint.                            |
 `after`      | Array    | Functions for after each sprint.                             |
@@ -72,7 +72,7 @@ hurdler.addHurdle({
 Hurdle options:
 
 Option     | Type     | Description
------------|----------|-----------------------------------------------------------
+:----------|:---------|:----------------------------------------------------------
 `test`     | function | Element test returning a boolean if it matches the hurdle.
 `callback` | function | Callback to run if the test passes.
 
