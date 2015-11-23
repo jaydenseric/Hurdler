@@ -89,10 +89,10 @@ Run callbacks are only triggered if the URL hash is in the configured Hurdler fo
 You can add as many callbacks as you like, with `this` being the URL hash target element:
 
 ```js
-Hurdler.before.push(function(sprint) {
+hurdler.before.push(function(sprint) {
   // Do stuff
 });
-Hurdler.after.push(function(sprint) {
+hurdler.after.push(function(sprint) {
   // Do stuff
 });
 ```
