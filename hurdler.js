@@ -62,7 +62,7 @@ var Hurdler = {
     // Progress if a URL hash is set
     if (location.hash) {
       // Check hash matches the configured Hurdler format
-      var id = Hurdler.getTargetId();
+      var id = Hurdler.getTargetId().split('?')[0];
       if (id) {
         var element = document.querySelector('#' + id);
         // Progress if the element exists
