@@ -1,0 +1,74 @@
+{
+  "name": "hurdler",
+  "version": "3.0.0-beta.1",
+  "description": "Hurdler enables modular client-side URL hash routing.",
+  "author": {
+    "name": "Jayden Seric",
+    "email": "me@jaydenseric.com",
+    "url": "http://jaydenseric.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://jaydenseric@github.com/jaydenseric/Hurdler.git"
+  },
+  "homepage": "https://github.com/jaydenseric/Hurdler#readme",
+  "bugs": "https://github.com/jaydenseric/Hurdler/issues",
+  "keywords": [
+    "hurdler",
+    "hurdles",
+    "hurdle",
+    "url",
+    "hash",
+    "router",
+    "es6"
+  ],
+  "main": "dist/hurdler.umd.js",
+  "jsnext:main": "dist/hurdler.es6.js",
+  "scripts": {
+    "docs": "jsdoc2md -t readme.hbs lib/**/*.js > readme.md",
+    "lint": "eslint .",
+    "prebuild": "npm run lint",
+    "build": "rollup -c rollup.config.umd.js && rollup -c rollup.config.es6.js",
+    "prepublish": "npm run build && npm run docs"
+  },
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "devDependencies": {
+    "babel-eslint": "^6.0.0",
+    "babel-preset-es2015-rollup": "^1.1.1",
+    "eslint": "^2.5.1",
+    "eslint-config-standard": "^5.1.0",
+    "eslint-plugin-promise": "^1.1.0",
+    "eslint-plugin-standard": "^1.3.2",
+    "jsdoc-to-markdown": "^1.3.3",
+    "rollup": "^0.25.7",
+    "rollup-plugin-babel": "^2.4.0",
+    "rollup-plugin-multi-entry": "^1.2.0",
+    "source-map-support": "^0.4.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015-rollup"
+    ],
+    "comments": false
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "extends": "standard",
+    "rules": {
+      "no-new": 1,
+      "valid-jsdoc": [
+        2,
+        {
+          "requireReturn": false,
+          "prefer": {
+            "return": "returns"
+          }
+        }
+      ]
+    }
+  }
+}
