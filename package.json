@@ -1,6 +1,6 @@
 {
   "name": "hurdler",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.0-beta.3",
   "description": "Hurdler enables modular client-side URL hash routing.",
   "author": {
     "name": "Jayden Seric",

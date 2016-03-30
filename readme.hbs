@@ -1,8 +1,8 @@
-# ![Hurdler](hurdler-logo.svg)
+# ![Hurdler](http://jaydenseric.com/shared/hurdler-logo.svg)
 
 ![NPM version](https://img.shields.io/npm/v/hurdler.svg?style=flat-square)
-![Github issues](https://img.shields.io/github/issues/jaydenseric/hurdler.svg?style=flat-square)
-![Github stars](https://img.shields.io/github/stars/jaydenseric/hurdler.svg?style=flat-square)
+![Github issues](https://img.shields.io/github/issues/jaydenseric/Hurdler.svg?style=flat-square)
+![Github stars](https://img.shields.io/github/stars/jaydenseric/Hurdler.svg?style=flat-square)
 
 Hurdler enables modular client-side URL hash routing. Each URL hash route only contains a target element ID. Hurdler runs up the DOM from the target, finding ancestor elements that match defined hurdles. It then triggers their actions from top to bottom.
 
