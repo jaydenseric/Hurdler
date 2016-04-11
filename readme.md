@@ -100,7 +100,7 @@ Constructs a new Hurdler instance with options.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [hashPrefix] | <code>string</code> | <code>&quot;&#x27;/&#x27;&quot;</code> | String between URL hash symbol and target element ID to denote Hurdler links. Prevents auto scroll. |
+| [hashPrefix] | <code>string</code> | <code>&quot;/&quot;</code> | String between URL hash symbol and target element ID to denote Hurdler links. Prevents auto scroll. |
 
 **Example**  
 ```js
@@ -112,18 +112,12 @@ const hurdler = new Hurdler()
 // Operates on URL hash changes via href="#!/my-element-id"
 const hurdler = new Hurdler('!/')
 ```
-<a name="Hurdler+run"></a>
+<a name="Hurdler+setHash"></a>
 
-### hurdler.run()
-Finds hurdles and runs callbacks for the current URL hash. Use this after all hurdles have been setup and the document is ready. URL hash changes automatically trigger a run.
-
-**Kind**: instance method of <code>[Hurdler](#Hurdler)</code>  
-<a name="Hurdler.setHash"></a>
-
-### Hurdler.setHash(id)
+### hurdler.setHash(id)
 Sets the URL hash, triggering a run.
 
-**Kind**: static method of <code>[Hurdler](#Hurdler)</code>  
+**Kind**: instance method of <code>[Hurdler](#Hurdler)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -133,19 +127,19 @@ Sets the URL hash, triggering a run.
 ```js
 hurdler.setHash('my-element-id')
 ```
-<a name="Hurdler.getTargetId"></a>
+<a name="Hurdler+getTargetId"></a>
 
-### Hurdler.getTargetId() ⇒ <code>string</code> &#124; <code>boolean</code>
+### hurdler.getTargetId() ⇒ <code>string</code> &#124; <code>boolean</code>
 Gets the target element ID from the URL hash.
 
-**Kind**: static method of <code>[Hurdler](#Hurdler)</code>  
+**Kind**: instance method of <code>[Hurdler](#Hurdler)</code>  
 **Returns**: <code>string</code> &#124; <code>boolean</code> - Target element ID or false if the URL hash is not set or invalid.  
-<a name="Hurdler.clearHash"></a>
+<a name="Hurdler+clearHash"></a>
 
-### Hurdler.clearHash(id)
+### hurdler.clearHash(id)
 Clears the URL hash if it contains a specific ID.
 
-**Kind**: static method of <code>[Hurdler](#Hurdler)</code>  
+**Kind**: instance method of <code>[Hurdler](#Hurdler)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -155,3 +149,9 @@ Clears the URL hash if it contains a specific ID.
 ```js
 hurdler.clearHash('my-element-id')
 ```
+<a name="Hurdler+run"></a>
+
+### hurdler.run()
+Finds hurdles and runs callbacks for the current URL hash. Use this after all hurdles have been setup and the document is ready. URL hash changes automatically trigger a run.
+
+**Kind**: instance method of <code>[Hurdler](#Hurdler)</code>  
