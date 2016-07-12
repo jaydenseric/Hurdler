@@ -8,6 +8,7 @@ Hurdler enables modular client-side URL hash routing. Each URL hash route only c
 
 - Setup simple tests identifying hurdles along with callbacks for when they are encountered.
 - By default, only URL hashes with the configured prefix are operated on. This prevents auto scroll and allows you to run Hurdler alongside other routers.
+- Written in ES6.
 - Implements UMD.
 - IE 11 and modern browser support. IE 9+ may work without guarantee.
 - [MIT license](https://en.wikipedia.org/wiki/MIT_License).
@@ -31,7 +32,7 @@ Install Hurdler in your project as an NPM dependency:
 npm install hurdler --save
 ```
 
-Hurdler implements UMD. Import it at the beginning of your app:
+Import it at the beginning of your app:
 
 ```js
 import Hurdler from 'hurdler'
@@ -92,66 +93,4 @@ You can add custom properties to the run session from within callbacks. Handy fo
 
 ## API
 
-<a name="new_Hurdler_new"></a>
-
-### new Hurdler([hashPrefix])
-Constructs a new Hurdler instance with options.
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [hashPrefix] | <code>string</code> | <code>&quot;/&quot;</code> | String between URL hash symbol and target element ID to denote Hurdler links. Prevents auto scroll. |
-
-**Example**  
-```js
-// Operates on URL hash changes via href="#/my-element-id"
-const hurdler = new Hurdler()
-```
-**Example**  
-```js
-// Operates on URL hash changes via href="#!/my-element-id"
-const hurdler = new Hurdler('!/')
-```
-<a name="Hurdler+setHash"></a>
-
-### hurdler.setHash(id)
-Sets the URL hash, triggering a run.
-
-**Kind**: instance method of <code>[Hurdler](#Hurdler)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| id | <code>string</code> | Target element ID. |
-
-**Example**  
-```js
-hurdler.setHash('my-element-id')
-```
-<a name="Hurdler+getTargetId"></a>
-
-### hurdler.getTargetId() ⇒ <code>string</code> &#124; <code>boolean</code>
-Gets the target element ID from the URL hash.
-
-**Kind**: instance method of <code>[Hurdler](#Hurdler)</code>  
-**Returns**: <code>string</code> &#124; <code>boolean</code> - Target element ID or false if the URL hash is not set or invalid.  
-<a name="Hurdler+clearHash"></a>
-
-### hurdler.clearHash(id)
-Clears the URL hash if it contains a specific ID.
-
-**Kind**: instance method of <code>[Hurdler](#Hurdler)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| id | <code>string</code> | Element ID. |
-
-**Example**  
-```js
-hurdler.clearHash('my-element-id')
-```
-<a name="Hurdler+run"></a>
-
-### hurdler.run()
-Finds hurdles and runs callbacks for the current URL hash. Use this after all hurdles have been setup and the document is ready. URL hash changes automatically trigger a run.
-
-**Kind**: instance method of <code>[Hurdler](#Hurdler)</code>  
+ERROR, Cannot find class.

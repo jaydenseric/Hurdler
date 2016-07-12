@@ -1,6 +1,6 @@
 {
   "name": "hurdler",
-  "version": "3.0.0-beta.4",
+  "version": "3.0.0-beta.5",
   "description": "Hurdler enables modular client-side URL hash routing.",
   "author": {
     "name": "Jayden Seric",
@@ -23,31 +23,27 @@
     "router",
     "es6"
   ],
-  "main": "dist/hurdler.umd.js",
-  "jsnext:main": "dist/hurdler.es6.js",
+  "main": "dist/hurdler.js",
+  "jsnext:main": "dist/hurdler.mjs",
   "scripts": {
-    "docs": "jsdoc2md -t readme.hbs lib/**/*.js > readme.md",
     "lint": "eslint .",
     "prebuild": "npm run lint",
-    "build": "rollup -c rollup.config.umd.js && rollup -c rollup.config.es6.js",
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "docs": "jsdoc2md -t readme-template.hbs lib/**/*.js > readme.md",
     "prepublish": "npm run build && npm run docs"
   },
-  "files": [
-    "lib",
-    "dist"
-  ],
   "devDependencies": {
-    "babel-eslint": "^6.0.2",
+    "babel-core": "^6.10.4",
     "babel-preset-es2015-rollup": "^1.1.1",
-    "eslint": "^2.7.0",
-    "eslint-config-standard": "^5.1.0",
-    "eslint-plugin-promise": "^1.1.0",
+    "eslint": "^3.0.1",
+    "eslint-config-standard": "^5.3.1",
+    "eslint-plugin-promise": "^1.3.2",
     "eslint-plugin-standard": "^1.3.2",
-    "jsdoc-to-markdown": "^1.3.3",
-    "rollup": "^0.25.8",
-    "rollup-plugin-babel": "^2.4.0",
-    "rollup-plugin-multi-entry": "^1.2.0",
-    "source-map-support": "^0.4.0"
+    "jsdoc-to-markdown": "^1.3.6",
+    "rollup": "^0.34.1",
+    "rollup-plugin-babel": "^2.6.1",
+    "rollup-watch": "^2.5.0"
   },
   "babel": {
     "presets": [
@@ -56,10 +52,8 @@
     "comments": false
   },
   "eslintConfig": {
-    "parser": "babel-eslint",
     "extends": "standard",
     "rules": {
-      "no-new": 1,
       "valid-jsdoc": [
         2,
         {

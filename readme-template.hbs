@@ -8,6 +8,7 @@ Hurdler enables modular client-side URL hash routing. Each URL hash route only c
 
 - Setup simple tests identifying hurdles along with callbacks for when they are encountered.
 - By default, only URL hashes with the configured prefix are operated on. This prevents auto scroll and allows you to run Hurdler alongside other routers.
+- Written in ES6.
 - Implements UMD.
 - IE 11 and modern browser support. IE 9+ may work without guarantee.
 - [MIT license](https://en.wikipedia.org/wiki/MIT_License).
@@ -31,7 +32,7 @@ Install Hurdler in your project as an NPM dependency:
 npm install hurdler --save
 ```
 
-Hurdler implements UMD. Import it at the beginning of your app:
+Import it at the beginning of your app:
 
 ```js
 import Hurdler from 'hurdler'
