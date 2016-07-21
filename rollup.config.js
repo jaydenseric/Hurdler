@@ -8,7 +8,7 @@ export default {
   targets: [{
     dest: pkg['main'],
     format: 'umd',
-    moduleName: 'scrollAnimator',
+    moduleName: 'hurdler',
     sourceMap: true
   }, {
     dest: pkg['jsnext:main'],
