@@ -24,7 +24,7 @@
     "es6"
   ],
   "main": "dist/hurdler.js",
-  "jsnext:main": "dist/hurdler.mjs",
+  "module": "dist/hurdler.module.js",
   "scripts": {
     "lint": "eslint .",
     "prebuild": "npm run lint",

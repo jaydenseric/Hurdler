@@ -11,7 +11,7 @@ export default {
     moduleName: 'hurdler',
     sourceMap: true
   }, {
-    dest: pkg['jsnext:main'],
+    dest: pkg['module'],
     format: 'es',
     sourceMap: true
   }]
