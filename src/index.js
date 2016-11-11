@@ -79,7 +79,7 @@ class Hurdler {
           // Start at the hash target and loop up the DOM
           for (; element && element !== document; element = element.parentNode) {
             // Check if element is a hurdle
-            this.hurdles.forEach((hurdle) => {
+            this.hurdles.forEach(hurdle => {
               let passes = false
               try {
                 passes = hurdle.test.call(element, session)
@@ -97,15 +97,15 @@ class Hurdler {
             })
           }
           // Run before run callbacks
-          this.before.forEach((callback) => {
+          this.before.forEach(callback => {
             callback.call(session.target, session)
           })
           // Run hurdle callbacks
-          session.hurdles.forEach((hurdle) => {
+          session.hurdles.forEach(hurdle => {
             hurdle.callback.call(hurdle.element, session)
           })
           // Run after run callbacks
-          this.after.forEach((callback) => {
+          this.after.forEach(callback => {
             callback.call(session.target, session)
           })
         }
