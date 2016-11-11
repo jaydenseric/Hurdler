@@ -30,7 +30,7 @@
     "prebuild": "npm run lint",
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "docs": "jsdoc2md -t readme-template.hbs lib/**/*.js > readme.md",
+    "docs": "jsdoc2md -t readme-template.hbs src/**/*.js > readme.md",
     "prepublish": "npm run build && npm run docs"
   },
   "devDependencies": {
