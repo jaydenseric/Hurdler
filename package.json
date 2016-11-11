@@ -46,8 +46,7 @@
   "babel": {
     "presets": [
       "es2015-rollup"
-    ],
-    "comments": false
+    ]
   },
   "eslintConfig": {
     "extends": "barebones"
