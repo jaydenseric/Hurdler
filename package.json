@@ -29,7 +29,7 @@
     "lint": "eslint .",
     "prebuild": "npm run lint",
     "build": "rollup -c",
-    "watch": "rollup -c -w",
+    "build:watch": "npm run build -- -w",
     "docs": "jsdoc2md -t readme-template.hbs src/**/*.js > readme.md",
     "prepublish": "npm run build && npm run docs"
   },
