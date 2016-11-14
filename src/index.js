@@ -1,7 +1,7 @@
 /**
  * Enables hash links to web page content hidden beneath layers of interaction.
  * @see https://github.com/jaydenseric/Hurdler
- * @version 3.0.0-beta.6
+ * @version 3.0.0
  * @author Jayden Seric
  * @license MIT
  */
