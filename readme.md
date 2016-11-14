@@ -52,12 +52,12 @@ To add a new hurdle test and callback:
 
 ```js
 hurdler.hurdles.push({
-  test: function(session) {
-    console.log(this, session);
-    return /* Boolean logic */;
+  test: function (session) {
+    console.log(this, session)
+    return /* Boolean logic */
   },
-  callback: function(session) {
-    console.log(this, session);
+  callback: function (session) {
+    console.log(this, session)
   }
 });
 ```
@@ -73,13 +73,13 @@ Run callbacks are only triggered if the URL hash is in the configured Hurdler fo
 You can add as many callbacks as you like, with `this` being the URL hash target element:
 
 ```js
-hurdler.before.push(function(session) {
-  console.log(this, session);
-});
+hurdler.before.push(function (session) {
+  console.log(this, session)
+})
 
-hurdler.after.push(function(session) {
-  console.log(this, session);
-});
+hurdler.after.push(function (session) {
+  console.log(this, session)
+})
 ```
 
 ## Run sessions
