@@ -1,6 +1,6 @@
 /*!
  * Hurdler: https://github.com/jaydenseric/Hurdler
- * @version v4.0.0
+ * @version v4.0.1
  * @author Jayden Seric
  * @license MIT
  */
