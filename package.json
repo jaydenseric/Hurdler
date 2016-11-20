@@ -1,7 +1,7 @@
 {
   "name": "hurdler",
-  "version": "3.0.0",
-  "description": "Hurdler enables modular client-side URL hash routing.",
+  "version": "4.0.0",
+  "description": "Hurdler makes nested UI interactions simple to manage via URL hash.",
   "author": {
     "name": "Jayden Seric",
     "email": "me@jaydenseric.com",
@@ -15,37 +15,57 @@
   "homepage": "https://github.com/jaydenseric/Hurdler#readme",
   "bugs": "https://github.com/jaydenseric/Hurdler/issues",
   "keywords": [
-    "hurdler",
-    "hurdles",
-    "hurdle",
     "url",
     "hash",
     "router",
+    "hurdler",
+    "hurdles",
+    "hurdle",
+    "target",
+    "sprint",
+    "jump",
+    "dom",
     "es6"
   ],
   "main": "dist/hurdler.js",
   "module": "dist/hurdler.module.js",
+  "files": [
+    "src",
+    "dist"
+  ],
   "scripts": {
-    "lint": "eslint .",
-    "prebuild": "npm run lint",
-    "build": "rollup -c",
-    "build:watch": "npm run build -- -w",
-    "docs": "jsdoc2md -t readme-template.hbs src/**/*.js > readme.md",
-    "prepublish": "npm run build && npm run docs"
+    "lint:js": "eslint .",
+    "lint:docs": "documentation lint src",
+    "prebuild": "npm run lint:js",
+    "build": "rollup --config",
+    "build:watch": "npm run build -- --watch",
+    "postbuild": "npm run docs",
+    "predocs": "npm run lint:docs",
+    "docs": "documentation readme src --section API --quiet",
+    "postdocs": "npm run tidydocs",
+    "tidydocs": "tidy-markdown < ./readme.md > ./readme-tidy.md && mv -f readme-tidy.md readme.md",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "babel-core": "^6.18.2",
-    "babel-preset-es2015-rollup": "^1.2.0",
-    "eslint": "^3.10.0",
+    "babel-preset-es2015": "^6.18.0",
+    "documentation": "^4.0.0-beta13",
+    "eslint": "^3.10.2",
     "eslint-config-barebones": "^0.1.3",
-    "jsdoc-to-markdown": "^2.0.1",
     "rollup": "^0.36.3",
     "rollup-plugin-babel": "^2.6.1",
-    "rollup-watch": "^2.5.0"
+    "rollup-watch": "^2.5.0",
+    "tidy-markdown": "^2.0.4"
   },
   "babel": {
     "presets": [
-      "es2015-rollup"
+      [
+        "es2015",
+        {
+          "modules": false,
+          "loose": true
+        }
+      ]
     ]
   },
   "eslintConfig": {

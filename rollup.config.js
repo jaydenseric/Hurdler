@@ -4,15 +4,15 @@ const pkg = require('./package.json')
 
 export default {
   entry: 'src/index.js',
-  plugins: [babel()],
+  plugins: [
+    babel()
+  ],
   targets: [{
     dest: pkg['main'],
-    format: 'umd',
-    moduleName: 'hurdler',
+    format: 'cjs',
     sourceMap: true
   }, {
     dest: pkg['module'],
-    format: 'es',
     sourceMap: true
   }]
 }

@@ -1,117 +1,165 @@
-/**
- * Enables hash links to web page content hidden beneath layers of interaction.
- * @see https://github.com/jaydenseric/Hurdler
- * @version 3.0.0
+/*!
+ * Hurdler: https://github.com/jaydenseric/Hurdler
+ * @version v4.0.0
  * @author Jayden Seric
  * @license MIT
  */
-class Hurdler {
-  /**
-   * Constructs a new Hurdler instance with options.
-   * @param {string} [hashPrefix=/] - String between URL hash symbol and target element ID to denote Hurdler links. Prevents auto scroll.
-   * @example
-   * // Operates on URL hash changes via href="#/my-element-id"
-   * const hurdler = new Hurdler()
-   * @example
-   * // Operates on URL hash changes via href="#!/my-element-id"
-   * const hurdler = new Hurdler('!/')
-   */
-  constructor (hashPrefix = '/') {
-    this.hashPrefix = hashPrefix
-    this.before = []
-    this.hurdles = []
-    this.after = []
-    // Run Hurdler every URL hash change
-    window.addEventListener('hashchange', () => {
-      this.run()
-    })
-  }
+
+/**
+ * Creates a new Hurdler session. There should only be one instance per window.
+ * @class
+ * @param {String} [$0.hashPrefix='/'] - String between URL hash symbol and target element ID to denote Hurdler links. Prevents auto scroll.
+ * @param {function} [$0.onSprintBefore] - Runs before each sprint.
+ * @param {function} [$0.onSprintAfter] - Runs after each sprint.
+ * @param {Hurdle[]} [$0.hurdles=[]] - List of hurdles.
+ * @example
+ * const hurdler = new Hurdler({
+ *   hashPrefix: '!/'
+ * })
+ */
+function Hurdler ({
+  hashPrefix = '/',
+  onSprintBefore,
+  onSprintAfter,
+  hurdles = []
+} = {}) {
+  this.hashPrefix = hashPrefix
+  this.onSprintBefore = onSprintBefore
+  this.onSprintAfter = onSprintAfter
+  this.hurdles = hurdles
 
   /**
-   * Sets the URL hash, triggering a run.
-   * @param {string} id - Target element ID.
+   * The current URL hash target element, or null if nonexistent.
+   * @type {HTMLElement|null}
    * @example
-   * hurdler.setHash('my-element-id')
+   * console.log(hurdler.target)
    */
-  setHash (id) {
-    window.location.hash = this.hashPrefix + id
-  }
+  this.target = null
 
-  /**
-   * Gets the target element ID from the URL hash.
-   * @returns {string|boolean} Target element ID or false if the URL hash is not set or invalid.
-   */
-  getTargetId () {
-    const hash = window.location.hash.split(`#${this.hashPrefix}`)
-    return hash.length === 2 ? hash[1] : false
-  }
+  // Sprint every URL hash change
+  window.addEventListener('hashchange', this.sprint.bind(this))
+}
 
-  /**
-   * Clears the URL hash if it contains a specific ID.
-   * @param {string} id - Element ID.
-   * @example
-   * hurdler.clearHash('my-element-id')
-   */
-  clearHash (id) {
-    if (window.location.hash === `#${this.hashPrefix}${id}`) {
-      if (window.history.pushState) window.history.pushState('', document.title, window.location.pathname + window.location.search)
-      else window.location.hash = this.hashPrefix
-    }
-  }
+/**
+ * Adds a hurdle.
+ * @param {Hurdle} options - A hurdle.
+ * @example
+ * hurdler.addHurdle({
+ *   test: element => {
+ *     return element.tagName === 'SECTION'
+ *   },
+ *   onJump: element => {
+ *     console.log('Jumped a section', element)
+ *   }
+ * })
+ */
+Hurdler.prototype.addHurdle = function (options) {
+  this.hurdles.push(options)
+}
 
-  /**
-   * Finds hurdles and runs callbacks for the current URL hash. Use this after all hurdles have been setup and the document is ready. URL hash changes automatically trigger a run.
-   */
-  run () {
-    // Progress if a URL hash is set
-    if (window.location.hash) {
-      // Check hash matches the configured Hurdler format
-      const id = this.getTargetId()
-      if (id) {
-        let element = document.querySelector(`#${id}`)
-        // Progress if the element exists
-        if (element) {
-          // Establish the run session
-          const session = {
-            target: element,
-            hurdles: []
-          }
-          // Start at the hash target and loop up the DOM
-          for (; element && element !== document; element = element.parentNode) {
-            // Check if element is a hurdle
-            this.hurdles.forEach(hurdle => {
-              let passes = false
-              try {
-                passes = hurdle.test.call(element, session)
-              } catch (error) {
-                // Swallow errors
-              }
-              if (passes) {
-                // Update list of found hurdles
-                session.hurdles.unshift({
-                  element,
-                  test: hurdle.test,
-                  callback: hurdle.callback
-                })
-              }
-            })
-          }
-          // Run before run callbacks
-          this.before.forEach(callback => {
-            callback.call(session.target, session)
-          })
-          // Run hurdle callbacks
-          session.hurdles.forEach(hurdle => {
-            hurdle.callback.call(hurdle.element, session)
-          })
-          // Run after run callbacks
-          this.after.forEach(callback => {
-            callback.call(session.target, session)
+/**
+ * Checks a provided URL hash matches the configured format.
+ * @param {string} hash - A URL hash to validate.
+ * @returns {boolean} URL hash validity.
+ * @example
+ * hurdler.validateHash(anExampleLinkElement.hash)
+ */
+Hurdler.prototype.validateHash = function (hash) {
+  // http://stackoverflow.com/a/4579228/1596978
+  return hash.lastIndexOf(this.hashPrefix, 0) === 0
+}
+
+/**
+ * Gets the URL hash target element.
+ * @private
+ * @returns {HTMLElement|null} Element with the ID targeted, or null if nonexistent.
+ */
+Hurdler.prototype.getTarget = function () {
+  const hash = window.location.hash.split(`#${this.hashPrefix}`)
+  return hash.length === 2 ? document.getElementById(hash[1]) : null
+}
+
+/**
+ * Sets the URL hash target element, triggering a sprint.
+ * @param {HTMLElement} element - Element with an ID to target.
+ * @example
+ * hurdler.setTarget(anExampleElement)
+ */
+Hurdler.prototype.setTarget = function (element) {
+  window.location.hash = this.hashPrefix + element.id
+}
+
+/**
+ * Clears the window URL hash if a given element is targeted, or if the URL hash matches the configured Hurdler format.
+ * @param {HTMLElement} [element] - Element with an ID that you do not want targeted.
+ * @example
+ * hurdler.clearTarget(anExampleElement)
+ */
+Hurdler.prototype.clearTarget = function (element) {
+  if (
+    element === undefined && this.validateHash(window.location.hash) ||
+    window.location.hash === `#${this.hashPrefix}${element.id}`
+  ) this.constructor.clearHash()
+}
+
+/**
+ * Jumps hurdles and runs callbacks for the current URL hash. Use after all hurdles have been added and the document is ready. Triggered automatically by URL hash changes.
+ * @example
+ * hurdler.sprint()
+ */
+Hurdler.prototype.sprint = function () {
+  // Update the target DOM element
+  this.target = this.getTarget()
+  // Only sprint if there is a target to start at
+  if (this.target) {
+    // Run before sprint callback
+    if (typeof this.onSprintBefore === 'function') this.onSprintBefore()
+    // Search from the target up the DOM for hurdles
+    let jumps = []
+    let testElement = this.target
+    do {
+      // Test every hurdle against the element
+      this.hurdles.forEach(hurdle => {
+        if (hurdle.test(testElement)) {
+          // Store hurdle jump for callbacks later
+          jumps.unshift({
+            element: testElement,
+            hurdle
           })
         }
-      }
-    }
+      })
+    } while ((testElement = testElement.parentElement))
+    // Run hurdle jump callbacks
+    jumps.forEach(jump => {
+      if (typeof jump.hurdle.onJump === 'function') jump.hurdle.onJump(jump.element)
+    })
+    // Run after sprint callback
+    if (typeof this.onSprintAfter === 'function') this.onSprintAfter()
   }
 }
+
+/**
+ * Clears the URL hash.
+ * @private
+ */
+Hurdler.clearHash = function () {
+  window.history.pushState('', document.title, window.location.pathname + window.location.search)
+}
+
+/**
+ * An object holding a test and callbacks for when a DOM element passes.
+ * @typedef {Object} Hurdle
+ * @property {function} test - Accepts an element and returns a boolean if it matches the hurdle.
+ * @property {function} [onJump] - Runs when the hurdle is jumped.
+ * @example
+ * {
+ *   test: element => {
+ *     return element.tagName === 'SECTION'
+ *   },
+ *   onJump: element => {
+ *     console.log('Jumped a section', element)
+ *   }
+ * }
+ */
 
 export default Hurdler
